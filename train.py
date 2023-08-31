@@ -1,7 +1,7 @@
 import os
 
 from model import build_transformer
-from dataset import BilingualDataset, causal_mask
+from dataset import BilingualDataset
 from config import get_config, get_weights_file_path
 
 import torchtext.datasets as datasets
@@ -41,7 +41,7 @@ def greedy_decode(model, source, source_mask, tokenizer_src, tokenizer_tgt, max_
 
         # build mask for target
         # hiding the future inputs
-        decoder_mask = causal_mask(decoder_input.size(1)).type_as(source_mask).to(device)
+        decoder_mask = BilingualDataset.causal_mask(decoder_input.size(1)).type_as(source_mask).to(device)
 
         # calculate output
         out = model.decode(encoder_output, source_mask, decoder_input, decoder_mask)
@@ -67,6 +67,12 @@ def run_validation(model, validation_ds, tokenizer_src, tokenizer_tgt, max_len, 
     source_texts = []
     expected = []
     predicted = []
+
+    # ****************   TO DO **************************************************
+    # Note: Correct 2 things
+    # 1. num_examples
+    # 2. the print_msg passed in the 'run_validation' call on ln 270
+    # ***************************************************************************
 
     try:
         # get the console window width
@@ -277,4 +283,3 @@ if __name__ == "__main__":
     warnings.filterwarnings("ignore")
     config = get_config()
     train_model(config)
-    

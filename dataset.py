@@ -131,6 +131,7 @@ class BilingualDataset(Dataset):
             "tgt_text": tgt_text,
         }
     
+    @staticmethod
     def causal_mask(size):
         # size is seq_len here
         # upper triangle of ones
